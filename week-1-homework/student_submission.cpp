@@ -118,9 +118,14 @@ void add_key() {
  */
 int main() {
     // Receive the problem from the system.
+    auto start = std::chrono::system_clock::now();
     readInput();
     std::unordered_map<uint8_t, uint8_t> SBOX;
     createSubstDict(SBOX);
+    
+    auto end1 = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end1-start;
+    std::cout << "After creating SubstDict: " << elapsed_seconds.count() << std::endl;
 
     // For extra security (and because Varys wasn't able to find enough test messages to keep you occupied) each message
     // is put through VV-AES lots of times. If we can't stop the adverse Maesters from decrypting our highly secure
@@ -142,14 +147,30 @@ int main() {
             shift_rows();
             mix_columns();
             add_key();
+
+            if(i == 0 && round==0){
+                auto end2 = std::chrono::system_clock::now();
+                elapsed_seconds = end2-end1;
+                std::cout << "Time for first round: " << elapsed_seconds.count() << std::endl;
+            }
         }
         // Final round
         substitute_bytes(SBOX);
         shift_rows();
         add_key();
+
+        if(i==0){
+            auto end3 = std::chrono::system_clock::now();
+            elapsed_seconds = end3-end1;
+            std::cout << "Time for first Iteration: " << elapsed_seconds.count() << std::endl;
+        }
     }
 
     // Submit our solution back to the system.
     writeOutput();
+
+    auto end4 = std::chrono::system_clock::now();
+    elapsed_seconds = end4-start;
+    std::cout << "Total time: " << elapsed_seconds.count() << std::endl;
     return 0;
 }
