@@ -1,14 +1,14 @@
 #include <cstring>
 #include <iostream>
+#include <unordered_map>
 
 #include "vv-aes.h"
 
 /**
  * This function creates the character substitution dictionary.
  */
-void createSubstDict() {
+void createSubstDict(std::unordered_map<uint8_t, uint8_t> &dict) {
     // For each possible character
-    int dict [UNIQUE_CHARACTERS];
     for (unsigned int k01 = 0; k01 < UNIQUE_CHARACTERS; ++k01){
         uint8_t key = originalCharacter[k01];
         dict[key] = substitutedCharacter[k01];
@@ -20,7 +20,7 @@ void createSubstDict() {
  * corresponding replacement as specified in the originalCharacter and substitutedCharacter array.
  * This corresponds to step 2.1 in the VV-AES explanation.
  */
-void substitute_bytes() {
+void substitute_bytes(std::unordered_map<uint8_t, uint8_t> &dict) {
     // For each byte in the message
     for (int column = 0; column < BLOCK_SIZE; column++) {
         for (int row = 0; row < BLOCK_SIZE; row++) {
@@ -119,7 +119,8 @@ void add_key() {
 int main() {
     // Receive the problem from the system.
     readInput();
-    createSubstDict();
+    std::unordered_map<uint8_t, uint8_t> SBOX;
+    createSubstDict(SBOX);
 
     // For extra security (and because Varys wasn't able to find enough test messages to keep you occupied) each message
     // is put through VV-AES lots of times. If we can't stop the adverse Maesters from decrypting our highly secure
@@ -137,13 +138,13 @@ int main() {
             set_next_key();
 
             // These are the four steps described in the slides.
-            substitute_bytes();
+            substitute_bytes(SBOX);
             shift_rows();
             mix_columns();
             add_key();
         }
         // Final round
-        substitute_bytes();
+        substitute_bytes(SBOX);
         shift_rows();
         add_key();
     }
