@@ -22,6 +22,7 @@ void createSubstDict(std::unordered_map<uint8_t, uint8_t> &dict) {
  */
 void substitute_bytes(std::unordered_map<uint8_t, uint8_t> &dict) {
     // For each byte in the message
+
     for (int column = 0; column < BLOCK_SIZE; column++) {
         for (int row = 0; row < BLOCK_SIZE; row++) {
             // Search for the byte in the original character list
@@ -61,16 +62,20 @@ void shift_rows() {
 }
 
 /*
- * This function calculates x^n for polynomial evaluation.
- */
+ * This function calculates x^n for polynomial evaluation. 
+
+ Function not needed
+
 int power(int x, int n) {
     // Calculates x^n
+
     if (n == 0) {
         return 1;
     }
-    return x * power(x, n - 1);
-}
 
+    return x^n;
+}
+ */
 /*
  * This function evaluates four different polynomials, one for each row in the column.
  * Each polynomial evaluated is of the form
@@ -83,7 +88,7 @@ void multiply_with_polynomial(int column) {
     for (int row = 0; row < BLOCK_SIZE; ++row) {
         int result = 0;
         for (int degree = 0; degree < BLOCK_SIZE; degree++) {
-            result += polynomialCoefficients[row][degree] * power(message[degree][column], degree + 1);
+            result += polynomialCoefficients[row][degree] * (message[degree][column])^(degree + 1);
         }
         message[row][column] = result;
     }
