@@ -36,12 +36,12 @@ void substitute_bytes(std::unordered_map<uint8_t, uint8_t> &dict) {
  * This function shifts (rotates) a row in the message array by one place to the left.
  * @param row The row which to shift.
  */
-void shift_row(int row) {
+void shift_row(int row, int shift_length) {
     // This does a shift (really a rotate) of a row, copying each element to the left
     auto *newRow = (unsigned char *) (malloc(BLOCK_SIZE));
 
     for (int i = 0; i < BLOCK_SIZE; ++i) {
-        newRow[i % BLOCK_SIZE] = message[row][(i + 1) % BLOCK_SIZE];
+        newRow[i % BLOCK_SIZE] = message[row][(i + shift_length) % BLOCK_SIZE];
     }
 
     memcpy(message[row], newRow, BLOCK_SIZE);
@@ -55,10 +55,8 @@ void shift_row(int row) {
  */
 void shift_rows() {
     // Shift each row, where the row index corresponds to how many columns the data is shifted.
-    for (int row = 0; row < BLOCK_SIZE; ++row) {
-        for (int shifts = 0; shifts < row; ++shifts) {
-            shift_row(row);
-        }
+    for (int row = 1; row < BLOCK_SIZE; ++row) {
+            shift_row(row, row);
     }
 }
 
