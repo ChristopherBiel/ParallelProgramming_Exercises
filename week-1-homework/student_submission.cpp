@@ -7,8 +7,9 @@
 /**
  * This function creates the character substitution dictionary.
  */
-void createSubstDict(std::unordered_map<uint8_t, uint8_t> &dict) {
+void createSubstDict() {
     // For each possible character
+    int dict [UNIQUE_CHARACTERS];
     for (unsigned int k01 = 0; k01 < UNIQUE_CHARACTERS; ++k01){
         uint8_t key = originalCharacter[k01];
         dict[key] = substitutedCharacter[k01];
@@ -26,7 +27,7 @@ void substitute_bytes(std::unordered_map<uint8_t, uint8_t> &dict) {
         for (int row = 0; row < BLOCK_SIZE; row++) {
             // Search for the byte in the original character list
             // and replace it with corresponding the element in the substituted character list
-
+            
             message[row][column] = dict[message[row][column]];
         }
     }
