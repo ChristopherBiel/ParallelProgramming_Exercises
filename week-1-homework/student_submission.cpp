@@ -63,8 +63,7 @@ void shift_rows() {
 
 /*
  * This function calculates x^n for polynomial evaluation. 
-
- Function not needed
+*/
 
 int power(int x, int n) {
     // Calculates x^n
@@ -73,9 +72,9 @@ int power(int x, int n) {
         return 1;
     }
 
-    return x^n;
+    return x*power(x,n-1);
 }
- */
+
 /*
  * This function evaluates four different polynomials, one for each row in the column.
  * Each polynomial evaluated is of the form
@@ -88,7 +87,7 @@ void multiply_with_polynomial(int column) {
     for (int row = 0; row < BLOCK_SIZE; ++row) {
         int result = 0;
         for (int degree = 0; degree < BLOCK_SIZE; degree++) {
-            result += polynomialCoefficients[row][degree] * (message[degree][column])^(degree + 1);
+            result += polynomialCoefficients[row][degree] * power(message[degree][column],degree + 1);
         }
         message[row][column] = result;
     }
@@ -126,9 +125,9 @@ int main() {
     std::unordered_map<uint8_t, uint8_t> SBOX;
     createSubstDict(SBOX);
     
-    auto end1 = std::chrono::system_clock::now();
-    std::chrono::duration<double> elapsed_seconds = end1-start;
-    std::cout << "After creating SubstDict: " << elapsed_seconds.count() << std::endl;
+    // auto end1 = std::chrono::system_clock::now();
+    //std::chrono::duration<double> elapsed_seconds = end1-start;
+    //std::cout << "After creating SubstDict: " << elapsed_seconds.count() << std::endl;
 
     // For extra security (and because Varys wasn't able to find enough test messages to keep you occupied) each message
     // is put through VV-AES lots of times. If we can't stop the adverse Maesters from decrypting our highly secure
@@ -151,29 +150,29 @@ int main() {
             mix_columns();
             add_key();
 
-            if(i == 0 && round==0){
-                auto end2 = std::chrono::system_clock::now();
-                elapsed_seconds = end2-end1;
-                std::cout << "Time for first round: " << elapsed_seconds.count() << std::endl;
-            }
+            //if(i == 0 && round==0){
+            //    auto end2 = std::chrono::system_clock::now();
+            //    elapsed_seconds = end2-end1;
+                //std::cout << "Time for first round: " << elapsed_seconds.count() << std::endl;
+            //}
         }
         // Final round
         substitute_bytes(SBOX);
         shift_rows();
         add_key();
 
-        if(i==0){
-            auto end3 = std::chrono::system_clock::now();
-            elapsed_seconds = end3-end1;
-            std::cout << "Time for first Iteration: " << elapsed_seconds.count() << std::endl;
-        }
+        //if(i==0){
+        //    auto end3 = std::chrono::system_clock::now();
+        //    elapsed_seconds = end3-end1;
+        //    //std::cout << "Time for first Iteration: " << elapsed_seconds.count() << std::endl;
+        //}
     }
 
     // Submit our solution back to the system.
     writeOutput();
 
     auto end4 = std::chrono::system_clock::now();
-    elapsed_seconds = end4-start;
+    std::chrono::duration<double> elapsed_seconds = end4-start;
     std::cout << "Total time: " << elapsed_seconds.count() << std::endl;
     return 0;
 }
