@@ -1,1 +1,1 @@
-# Parallel Programming Exercises for Team Luca Chris
+# Parallel Programming Exercises for Team Luca and Chris
