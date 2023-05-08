@@ -4,6 +4,18 @@
 #include "vv-aes.h"
 
 /**
+ * This function creates the character substitution dictionary.
+ */
+void createSubstDict() {
+    // For each possible character
+    int dict [UNIQUE_CHARACTERS];
+    for (unsigned int k01 = 0; k01 < UNIQUE_CHARACTERS; ++k01){
+        uint8_t key = originalCharacter[k01];
+        dict[key] = substitutedCharacter[k01];
+    }
+}
+
+/**
  * This function takes the characters stored in the 7x7 message array and substitutes each character for the
  * corresponding replacement as specified in the originalCharacter and substitutedCharacter array.
  * This corresponds to step 2.1 in the VV-AES explanation.
@@ -14,14 +26,8 @@ void substitute_bytes() {
         for (int row = 0; row < BLOCK_SIZE; row++) {
             // Search for the byte in the original character list
             // and replace it with corresponding the element in the substituted character list
-            int index = -1;
-            for (int i = 0; i < UNIQUE_CHARACTERS; i++) {
-                if (originalCharacter[i] == message[row][column]) {
-                    index = i;
-                }
-            }
-
-            message[row][column] = substitutedCharacter[index];
+            
+            message[row][column] = dict[message[row][column]];
         }
     }
 }
