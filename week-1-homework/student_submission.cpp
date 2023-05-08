@@ -26,7 +26,7 @@ void substitute_bytes() {
         for (int row = 0; row < BLOCK_SIZE; row++) {
             // Search for the byte in the original character list
             // and replace it with corresponding the element in the substituted character list
-            
+
             message[row][column] = dict[message[row][column]];
         }
     }
@@ -119,6 +119,7 @@ void add_key() {
 int main() {
     // Receive the problem from the system.
     readInput();
+    createSubstDict();
 
     // For extra security (and because Varys wasn't able to find enough test messages to keep you occupied) each message
     // is put through VV-AES lots of times. If we can't stop the adverse Maesters from decrypting our highly secure
