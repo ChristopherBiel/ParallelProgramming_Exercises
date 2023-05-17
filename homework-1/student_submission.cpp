@@ -121,16 +121,12 @@ int main() {
     // Receive the problem from the system.
     auto start = std::chrono::system_clock::now();
     readInput();
-<<<<<<< HEAD
     std::unordered_map<uint8_t, uint8_t> SBOX;
     createSubstDict(SBOX);
     
     auto end1 = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end1-start;
     std::cout << "After creating SubstDict: " << elapsed_seconds.count() << std::endl;
-=======
-    createSubstDict();
->>>>>>> 7f07351 (added call for dict creation)
 
     // For extra security (and because Varys wasn't able to find enough test messages to keep you occupied) each message
     // is put through VV-AES lots of times. If we can't stop the adverse Maesters from decrypting our highly secure
